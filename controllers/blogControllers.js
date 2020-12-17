@@ -51,8 +51,19 @@ const createBlog = (req, res, next, pathName, linksArray) => {
     });
 };
 
+const deleteBlogById = (req, res, next) => {
+  BlogSchema.findByIdAndDelete(req.params.id)
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
 module.exports = {
   getAllBlogs,
   getBlogById,
   createBlog,
+  deleteBlogById,
 };

@@ -5,6 +5,7 @@ const {
   getAllBlogs,
   getBlogById,
   createBlog,
+  deleteBlogById,
 } = require("../controllers/blogControllers");
 const blogRoute = express.Router();
 
@@ -19,6 +20,6 @@ blogRoute.post("/", upload.single("imageUrl"), (req, res, next) => {
   next(createBlog(req, res, next, pathName, linksArray));
 });
 
-blogRoute.route("/:id").get(getBlogById);
+blogRoute.route("/:id").get(getBlogById).delete(deleteBlogById);
 
 module.exports = blogRoute;
