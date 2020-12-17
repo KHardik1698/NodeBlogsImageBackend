@@ -1,7 +1,11 @@
 const path = require("path");
 const express = require("express");
 const upload = require("../helpers/multer");
-const { getAllBlogs, createBlog } = require("../controllers/blogControllers");
+const {
+  getAllBlogs,
+  getBlogById,
+  createBlog,
+} = require("../controllers/blogControllers");
 const blogRoute = express.Router();
 
 blogRoute.route("/").get(getAllBlogs);
@@ -14,5 +18,7 @@ blogRoute.post("/", upload.single("imageUrl"), (req, res, next) => {
   }
   next(createBlog(req, res, next, pathName, linksArray));
 });
+
+blogRoute.route("/:id").get(getBlogById);
 
 module.exports = blogRoute;

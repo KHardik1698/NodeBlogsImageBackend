@@ -20,6 +20,16 @@ const getAllBlogs = (req, res, next) => {
     });
 };
 
+const getBlogById = (req, res, next) => {
+  BlogSchema.findById(req.params.id)
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
 const createBlog = (req, res, next, pathName, linksArray) => {
   let newBlog = new BlogSchema({
     author: req.body.author,
@@ -43,5 +53,6 @@ const createBlog = (req, res, next, pathName, linksArray) => {
 
 module.exports = {
   getAllBlogs,
+  getBlogById,
   createBlog,
 };
