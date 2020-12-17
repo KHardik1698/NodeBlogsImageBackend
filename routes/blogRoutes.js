@@ -1,8 +1,10 @@
 const path = require("path");
 const express = require("express");
 const upload = require("../helpers/multer");
-const { createBlog } = require("../controllers/blogControllers");
+const { getAllBlogs, createBlog } = require("../controllers/blogControllers");
 const blogRoute = express.Router();
+
+blogRoute.route("/").get(getAllBlogs);
 
 blogRoute.post("/", upload.single("imageUrl"), (req, res, next) => {
   let pathName = " ";
