@@ -1,3 +1,4 @@
+const path = require("path");
 const mongoose = require("mongoose");
 const BlogSchema = require("../models/blogModel");
 const upload = require("../helpers/multer");
@@ -18,6 +19,20 @@ const getAllBlogs = (req, res, next) => {
       console.log(err);
       res.send(err);
     });
+  // sendResponse(
+  //   200,
+  //   "Request for getting all the Blogs was Successful.",
+  //   data,
+  //   res
+  // );
+  // sendError(
+  //   new AppError(
+  //     404,
+  //     "Request was Unsuccessful",
+  //     `Blog with Id ${req.params.id} does not exist.`
+  //   ),
+  //   res
+  // );
 };
 
 const getBlogById = (req, res, next) => {
@@ -30,7 +45,15 @@ const getBlogById = (req, res, next) => {
     });
 };
 
-const createBlog = (req, res, next, pathName, linksArray) => {
+const createBlog = (req, res, next) => {
+  let pathName = " ";
+  let linksArray = [];
+  req.body.links.split(",").forEach((link) => {
+    linksArray.push(link.trim());
+  });
+  if (req.file) {
+    pathName = path.join(__dirname, req.file.path);
+  }
   let newBlog = new BlogSchema({
     author: req.body.author,
     title: req.body.title,
@@ -41,10 +64,11 @@ const createBlog = (req, res, next, pathName, linksArray) => {
   newBlog
     .save()
     .then((data) => {
-      // res.status(200).json({
-      //   message: "Successful",
-      //   data: data,
-      // });
+      console.log(data);
+      res.status(200).json({
+        message: "Blog Added",
+        data: data,
+      });
     })
     .catch((err) => {
       console.log(err);
