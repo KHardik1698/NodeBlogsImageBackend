@@ -7,12 +7,13 @@ const {
   createBlog,
   deleteBlogById,
 } = require("../controllers/blogControllers");
+const verifyRequestBody = require("../middlewares/validationMiddlewares");
 const blogRoute = express.Router();
 
 blogRoute
   .route("/")
   .get(getAllBlogs)
-  .post(upload.single("imageUrl"), createBlog);
+  .post(upload, verifyRequestBody, createBlog);
 
 blogRoute.route("/:id").get(getBlogById).delete(deleteBlogById);
 
