@@ -54,7 +54,14 @@ Currently, a local MongoDB is used for Storing the Data.
 # Main Component:
 
 The Main Component is responsible for starting the Node Express Server on Localhost at the specified Port Number.\
-The other function of the Main Component is to redirect any request on "/blogs" to the Routes Component.
+The other function of the Main Component is to redirect any request on "/blogs" to the Routes Component.\
+The Main Component is also responsible to connect the Server with MongoDB.
+
+# Models Component:
+
+The Models Component is responsible for creating a MongoDB Schema.\
+This Schema contains the Structure of the Task Object to be created along with some Validations within the Schema itself.\
+The Schema Model Object is used whenever a MongoDB Operation has to be performed.
 
 # Routes Component:
 
