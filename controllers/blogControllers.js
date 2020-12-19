@@ -8,13 +8,25 @@ const sendError = require("../helpers/sendError");
 const AppError = require("../helpers/appErrorClass");
 
 const getAllBlogs = (req, res, next) => {
+  let select = "";
+  if (req.query.select) {
+    req.query.select.split(" ").forEach((query) => {
+      if (!query.includes("__v")) {
+        select = select + query + " ";
+      }
+    });
+  } else select = "-__v";
+  if (select.length == 0) select = "-__v";
+  delete req.query.select;
   BlogSchema.find(req.query)
+    .select(`${select} -_id`)
     .then((data) => {
-      if (data)
+      if (data.length !== 0)
         sendResponse(
           200,
-          "Request for getting all the Blogs was Successful.",
+          "Request for getting the Blogs Data was Successful.",
           data,
+          req,
           res
         );
       else
@@ -22,8 +34,9 @@ const getAllBlogs = (req, res, next) => {
           new AppError(
             404,
             "Request was Unsuccessful.",
-            "Blogs are not present."
+            "Blogs Data not found."
           ),
+          req,
           res
         );
     })
@@ -31,19 +44,23 @@ const getAllBlogs = (req, res, next) => {
       console.log(err);
       sendError(
         new AppError(500, "Request was Unsuccessful.", "Internal Error."),
+        req,
         res
       );
     });
+  req.query.select = select;
 };
 
 const getBlogById = (req, res, next) => {
-  BlogSchema.findById(req.params.id)
+  BlogSchema.findOne({ blogId: req.params.id })
+    .select("-_id -__v")
     .then((data) => {
       if (data)
         sendResponse(
           200,
           `Request for getting the Blog with Id ${req.params.id} was Successful.`,
           data,
+          req,
           res
         );
       else
@@ -53,6 +70,7 @@ const getBlogById = (req, res, next) => {
             "Request was Unsuccessful.",
             `Blog with Id ${req.params.id} does not exist.`
           ),
+          req,
           res
         );
     })
@@ -60,6 +78,7 @@ const getBlogById = (req, res, next) => {
       console.log(err);
       sendError(
         new AppError(500, "Request was Unsuccessful.", "Internal Error."),
+        req,
         res
       );
     });
@@ -84,18 +103,29 @@ const createBlog = (req, res, next) => {
   newBlog
     .save()
     .then((data) => {
-      console.log(data);
-      sendResponse(
-        200,
-        "Request for creating a New Blog was Successful. Blog Created.",
-        data,
-        res
-      );
+      if (data.length !== 0) {
+        data = data.toObject();
+        delete data._id;
+        delete data.__v;
+        sendResponse(
+          200,
+          "Request for creating a New Blog was Successful. New Blog Created.",
+          data,
+          req,
+          res
+        );
+      } else
+        sendErrorMessage(
+          new AppError(404, "Unsuccessful.", "New Blog was not Created."),
+          req,
+          res
+        );
     })
     .catch((err) => {
       console.log(err);
       sendError(
         new AppError(500, "Request was Unsuccessful.", "Internal Error."),
+        req,
         res
       );
     });
@@ -108,8 +138,9 @@ const deleteBlogById = (req, res, next) => {
         fs.unlinkSync(data.imageUrl);
         sendResponse(
           200,
-          `Request for deleting the Blog with Id ${req.params.id} was Successful. Blog Deleted`,
+          `Request for deleting the Blog with Id ${req.params.id} was Successful. Blog Deleted.`,
           data,
+          req,
           res
         );
       } else
@@ -119,6 +150,7 @@ const deleteBlogById = (req, res, next) => {
             "Request was Unsuccessful.",
             `Blog with Id ${req.params.id} does not exist.`
           ),
+          req,
           res
         );
     })
@@ -126,6 +158,7 @@ const deleteBlogById = (req, res, next) => {
       console.log(err);
       sendError(
         new AppError(500, "Request was Unsuccessful.", "Internal Error."),
+        req,
         res
       );
     });

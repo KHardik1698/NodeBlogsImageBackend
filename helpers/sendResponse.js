@@ -1,4 +1,4 @@
-const sendResponse = (statusCode, message, blogData, res) => {
+const sendResponse = (statusCode, message, blogData, req, res) => {
   res.status(statusCode).json({
     message: message,
     blogData: blogData,
