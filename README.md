@@ -100,5 +100,5 @@ If it's valid, then the Execution continues, otherwise it will return an Error M
 
 # Demo:
 
-Live Demo of the NodeJS Blogs Backend API can be found here:\
+Live Demo of the NodeJS Blogs Image Backend API can be found here:\
 https://node-blogs-image-backend.herokuapp.com/blogs/
