@@ -1,6 +1,6 @@
-# NodeJS Blogs Image Backend API
+# MongoDB NodeJS Blogs with Image Backend API
 
-This Repository contains a Project which has the Node Backend for Blogs with Images.\
+This Repository contains a Project which has the MongoDB Node Backend for Blogs with Images.\
 This Project is created using a Modular approach, where various functionalities are divided into various Modules.
 
 # Api End Points:
@@ -100,5 +100,5 @@ If it's valid, then the Execution continues, otherwise it will return an Error M
 
 # Demo:
 
-Live Demo of the NodeJS Blogs Image Backend API can be found here:\
+Live Demo of the MongoDB NodeJS Blogs with Image Backend API can be found here:\
 https://node-blogs-image-backend.herokuapp.com/blogs/
