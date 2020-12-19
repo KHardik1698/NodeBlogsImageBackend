@@ -11,38 +11,57 @@ const getAllBlogs = (req, res, next) => {
   BlogSchema.find(req.query)
     .then((data) => {
       if (data)
-        res.status(200).json({
-          message: "All Blogs",
-          data: data,
-        });
+        sendResponse(
+          200,
+          "Request for getting all the Blogs was Successful.",
+          data,
+          res
+        );
+      else
+        sendError(
+          new AppError(
+            404,
+            "Request was Unsuccessful.",
+            "Blogs are not present."
+          ),
+          res
+        );
     })
     .catch((err) => {
       console.log(err);
-      res.send(err);
+      sendError(
+        new AppError(500, "Request was Unsuccessful.", "Internal Error."),
+        res
+      );
     });
-  // sendResponse(
-  //   200,
-  //   "Request for getting all the Blogs was Successful.",
-  //   data,
-  //   res
-  // );
-  // sendError(
-  //   new AppError(
-  //     404,
-  //     "Request was Unsuccessful",
-  //     `Blog with Id ${req.params.id} does not exist.`
-  //   ),
-  //   res
-  // );
 };
 
 const getBlogById = (req, res, next) => {
   BlogSchema.findById(req.params.id)
     .then((data) => {
-      res.send(data);
+      if (data)
+        sendResponse(
+          200,
+          `Request for getting the Blog with Id ${req.params.id} was Successful.`,
+          data,
+          res
+        );
+      else
+        sendError(
+          new AppError(
+            404,
+            "Request was Unsuccessful.",
+            `Blog with Id ${req.params.id} does not exist.`
+          ),
+          res
+        );
     })
     .catch((err) => {
       console.log(err);
+      sendError(
+        new AppError(500, "Request was Unsuccessful.", "Internal Error."),
+        res
+      );
     });
 };
 
@@ -66,13 +85,19 @@ const createBlog = (req, res, next) => {
     .save()
     .then((data) => {
       console.log(data);
-      res.status(200).json({
-        message: "Blog Added",
-        data: data,
-      });
+      sendResponse(
+        200,
+        "Request for creating a New Blog was Successful. Blog Created.",
+        data,
+        res
+      );
     })
     .catch((err) => {
       console.log(err);
+      sendError(
+        new AppError(500, "Request was Unsuccessful.", "Internal Error."),
+        res
+      );
     });
 };
 
@@ -81,11 +106,28 @@ const deleteBlogById = (req, res, next) => {
     .then((data) => {
       if (data) {
         fs.unlinkSync(data.imageUrl);
-        res.send(data);
-      } else res.send("No Blog");
+        sendResponse(
+          200,
+          `Request for deleting the Blog with Id ${req.params.id} was Successful. Blog Deleted`,
+          data,
+          res
+        );
+      } else
+        sendError(
+          new AppError(
+            404,
+            "Request was Unsuccessful.",
+            `Blog with Id ${req.params.id} does not exist.`
+          ),
+          res
+        );
     })
     .catch((err) => {
       console.log(err);
+      sendError(
+        new AppError(500, "Request was Unsuccessful.", "Internal Error."),
+        res
+      );
     });
 };
 
