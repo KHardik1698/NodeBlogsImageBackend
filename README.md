@@ -98,7 +98,7 @@ It will also check if the File uploaded is an Image or not.
 The Validation Middleware is used to check if the Request Body is Valid or not.\
 If it's valid, then the Execution continues, otherwise it will return an Error Message.
 
-<!-- # Demo: -->
+# Demo:
 
-<!-- Live Demo of the NodeJS Blogs Backend API can be found here:\
-https://node-blogs-backend.herokuapp.com/blogs/ -->
+Live Demo of the NodeJS Blogs Backend API can be found here:\
+https://node-blogs-image-backend.herokuapp.com/blogs/
