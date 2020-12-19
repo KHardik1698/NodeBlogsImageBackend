@@ -1,3 +1,4 @@
+const fs = require("fs");
 const path = require("path");
 const mongoose = require("mongoose");
 const BlogSchema = require("../models/blogModel");
@@ -52,7 +53,7 @@ const createBlog = (req, res, next) => {
     linksArray.push(link.trim());
   });
   if (req.file) {
-    pathName = path.join(__dirname, req.file.path);
+    pathName = path.join(__dirname, "..", req.file.path);
   }
   let newBlog = new BlogSchema({
     author: req.body.author,
@@ -78,7 +79,10 @@ const createBlog = (req, res, next) => {
 const deleteBlogById = (req, res, next) => {
   BlogSchema.findByIdAndDelete(req.params.id)
     .then((data) => {
-      res.send(data);
+      if (data) {
+        fs.unlinkSync(data.imageUrl);
+        res.send(data);
+      } else res.send("No Blog");
     })
     .catch((err) => {
       console.log(err);

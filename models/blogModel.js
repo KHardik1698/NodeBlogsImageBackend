@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const uniqid = require("uniqid");
 
 const blogSchema = new mongoose.Schema({
-  id: {
+  blogId: {
     type: String,
     default: "blog-" + uniqid(),
   },
