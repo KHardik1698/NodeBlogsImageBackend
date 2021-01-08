@@ -1,10 +1,8 @@
 const mongoose = require("mongoose");
-const uniqid = require("uniqid");
 
 const blogSchema = new mongoose.Schema({
   blogId: {
     type: String,
-    default: "blog-" + uniqid(),
   },
   author: {
     type: String,

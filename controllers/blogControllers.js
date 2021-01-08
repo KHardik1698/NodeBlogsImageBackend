@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const mongoose = require("mongoose");
+const uniqid = require("uniqid");
 const BlogSchema = require("../models/blogModel");
 const upload = require("../helpers/multer");
 const sendResponse = require("../helpers/sendResponse");
@@ -22,31 +23,17 @@ const getAllBlogs = (req, res, next) => {
     .select(`${select} -_id`)
     .then((data) => {
       if (data.length !== 0)
-        sendResponse(
-          200,
-          "Request for getting the Blogs Data was Successful.",
-          data,
-          req,
-          res
-        );
+        sendResponse(200, "Request for getting the Blogs Data was Successful.", data, req, res);
       else
         sendError(
-          new AppError(
-            404,
-            "Request was Unsuccessful.",
-            "Blogs Data not found."
-          ),
+          new AppError(404, "Request was Unsuccessful.", "Blogs Data not found."),
           req,
           res
         );
     })
     .catch((err) => {
       console.log(err);
-      sendError(
-        new AppError(500, "Request was Unsuccessful.", "Internal Error."),
-        req,
-        res
-      );
+      sendError(new AppError(500, "Request was Unsuccessful.", "Internal Error."), req, res);
     });
   req.query.select = select;
 };
@@ -76,11 +63,7 @@ const getBlogById = (req, res, next) => {
     })
     .catch((err) => {
       console.log(err);
-      sendError(
-        new AppError(500, "Request was Unsuccessful.", "Internal Error."),
-        req,
-        res
-      );
+      sendError(new AppError(500, "Request was Unsuccessful.", "Internal Error."), req, res);
     });
 };
 
@@ -94,6 +77,7 @@ const createBlog = (req, res, next) => {
     pathName = path.join(__dirname, "..", req.file.path);
   }
   let newBlog = new BlogSchema({
+    blogId: "blog-" + uniqid(),
     author: req.body.author,
     title: req.body.title,
     content: req.body.content,
@@ -115,19 +99,11 @@ const createBlog = (req, res, next) => {
           res
         );
       } else
-        sendErrorMessage(
-          new AppError(404, "Unsuccessful.", "New Blog was not Created."),
-          req,
-          res
-        );
+        sendErrorMessage(new AppError(404, "Unsuccessful.", "New Blog was not Created."), req, res);
     })
     .catch((err) => {
       console.log(err);
-      sendError(
-        new AppError(500, "Request was Unsuccessful.", "Internal Error."),
-        req,
-        res
-      );
+      sendError(new AppError(500, "Request was Unsuccessful.", "Internal Error."), req, res);
     });
 };
 
@@ -156,11 +132,7 @@ const deleteBlogById = (req, res, next) => {
     })
     .catch((err) => {
       console.log(err);
-      sendError(
-        new AppError(500, "Request was Unsuccessful.", "Internal Error."),
-        req,
-        res
-      );
+      sendError(new AppError(500, "Request was Unsuccessful.", "Internal Error."), req, res);
     });
 };
 
